@@ -2,6 +2,7 @@
 
 import numpy as np
 from pathlib import Path
+from sys import argv
 
 with open(Path(__file__).parent / 'secret.input') as f:
   field = f.read().splitlines()
@@ -26,6 +27,20 @@ for i in range(2, len(field), 2):
   b[idxs+1] += beam[-1, idxs]
   beam = np.concat((beam, [b]))
 
+if any(cmd in argv[1:] for cmd in '--print -p print'.split()):
+  for i, l in enumerate(field):
+    for j, x in enumerate(l):
+      if x != '.':
+        s = x
+      elif beam[i//2, j]:
+        s = '|'
+      else:
+        s = '.'
+      print(s, end='')
+    print()
+  print()
+
+
 def part_one():
   return count
 
@@ -35,18 +50,4 @@ def part_two():
 
 print('Part 1:', part_one())
 print('Part 2:', part_two())
-
-
-# for i, l in enumerate(field):
-#   for j, x in enumerate(l):
-#     if x != '.':
-#       s = x
-#     elif beam[i//2, j]:
-#       s = '|'
-#     else:
-#       s = '.'
-#     print(s, end='')
-#   print()
-
-
 
