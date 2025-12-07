@@ -22,6 +22,7 @@ python <DAY>/solve.py
 - **Day 4 – Printing Department (`04/solve.py`)**: Grid-based forklift counting. Part 1 counts `@` symbols with fewer than 4 adjacent forklifts. Part 2 iteratively removes undercrowded forklifts until no more can be removed, tracking the total count.
 - **Day 5 – Cafeteria (`05/solve.py`)**: ID range validation. Part 1 counts how many available IDs fall within any given range. Part 2 merges overlapping ranges and calculates the total count of unique IDs across all merged ranges.
 - **Day 6 – Trash Compactor (`06/solve.py`)**: Numeric grid operations with operators. Part 1 applies column-wise operations (sum or product) based on a sequence of operators. Part 2 reads vertically-aligned numbers separated by spaces and applies operators to each group.
+- **Day 7 – Laboratories (`07/solve.py`)**: Beam propagation simulation through a grid. Starts from position 'S' and traces a beam downward. When hitting '^' symbols, the beam splits left and right. Part 1 counts total collisions with '^' obstacles. Part 2 counts all positions reached by the beam after full propagation.
 
 ## Requirements
 
