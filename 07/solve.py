@@ -13,10 +13,6 @@ def find_all(s: str, sub: str):
     idxs.append(i)
   return tuple(idxs)
 
-# field[1] = field[1][:start_idx[1]] + '|' + field[1][start_idx[1]+1:]
-
-# beam = np.zeros((2, len(field[1])), int)
-# beam[:, start_idx[1]] = 1
 beam: np.ndarray = (np.arange(len(field[1])).reshape((1, -1)) == start_idx[1]).astype(int)
 
 count = 0
@@ -30,19 +26,27 @@ for i in range(2, len(field), 2):
   b[idxs+1] += beam[-1, idxs]
   beam = np.concat((beam, [b]))
 
-print(count)
+def part_one():
+  return count
+
+def part_two():
+  return beam[-1].sum()
 
 
-for i, l in enumerate(field):
-  for j, x in enumerate(l):
-    if x != '.':
-      s = x
-    elif beam[i//2, j]:
-      s = '|'
-    else:
-      s = '.'
-    print(s, end='')
-  print()
+print('Part 1:', part_one())
+print('Part 2:', part_two())
+
+
+# for i, l in enumerate(field):
+#   for j, x in enumerate(l):
+#     if x != '.':
+#       s = x
+#     elif beam[i//2, j]:
+#       s = '|'
+#     else:
+#       s = '.'
+#     print(s, end='')
+#   print()
 
 
 
