@@ -27,21 +27,50 @@ with open(Path(__file__).parent / 'secret.input') as f:
 # unique_clusters = {i.item() for i in clusters}
 
 
-all_norms = np.linalg.norm(np.expand_dims(coords, 1) - np.expand_dims(coords, 0), axis=-1)
-# all_coord_idxs = np.array([(i, j) for i in range(len(coords)) for j in range(len(coords))]).reshape((len(coords), len(coords), 2))
-idxs = np.array([(i, j) for i in range(len(coords)) for j in range(i+1, len(coords))])
+def part_one():
+  all_norms = np.linalg.norm(np.expand_dims(coords, 1) - np.expand_dims(coords, 0), axis=-1)
+  idxs = np.array([(i, j) for i in range(len(coords)) for j in range(i+1, len(coords))])
 
-norms = all_norms[*idxs.T]
+  norms = all_norms[*idxs.T]
 
-closest_idxs = idxs[np.argsort(norms)[:1000]]
+  closest_idxs = idxs[np.argsort(norms)[:1000]]
 
-clusters = np.arange(len(coords))
-for a, b in closest_idxs:
-  clusters[clusters == clusters[b]] = clusters[a]
-unique_clusters = ({i.item() for i in clusters})
+  clusters = np.arange(len(coords))
 
-cluster_counts = {c: sum(clusters==c).item() for c in unique_clusters}
-sorted_sizes = sorted(cluster_counts.values())
-res = np.prod(sorted_sizes[-3:]).item() # too low
+  for a, b in closest_idxs:
+    clusters[clusters == clusters[b]] = clusters[a]
+  unique_clusters = {i.item() for i in clusters}
+
+  cluster_counts = {c: sum(clusters==c).item() for c in unique_clusters}
+  sorted_sizes = sorted(cluster_counts.values())
+  res = np.prod(sorted_sizes[-3:]).item()
+  return res
+
+def part_two():
+  all_norms = np.linalg.norm(np.expand_dims(coords, 1) - np.expand_dims(coords, 0), axis=-1)
+  idxs = np.array([(i, j) for i in range(len(coords)) for j in range(i+1, len(coords))])
+
+  norms = all_norms[*idxs.T]
+
+  closest_idxs = idxs[np.argsort(norms)]
+
+  clusters = np.arange(len(coords))
+
+  unique_clusters = {}
+  last_a, last_b = None, None
+  for a, b in closest_idxs:
+    clusters[clusters == clusters[b]] = clusters[a]
+    unique_clusters = {i.item() for i in clusters}
+    if len(unique_clusters) == 1:
+      last_a, last_b = a, b
+      break
+  x, y = coords[[last_a, last_b], :]
+  res = (x[0] * y[0]).item()
+
+  return res
+
+
+print('Part 1:', part_one())
+print('Part 1:', part_two())
 
 
