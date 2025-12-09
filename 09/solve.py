@@ -23,9 +23,51 @@ def part_one():
   return max_area
 
 
+def gen_orientation(coords=coords):
+  '''
+  If the lines would form a rectangle then, depending on the direction the lines are defined,
+  the number of turns is either 4 rights and 0 lefts or 0 rights and 4 lefts. If onw would extrude
+  a smaller rectangle on of the sides, either inwards or outwards, the total number of addtitional
+  left turns and right turns would be equal. Without loss of generality, one might start with a
+  1x1 rectangle and only add single 1x1 rectangle. It is obvious that any shape might be created
+  in that way and that the orientation is an invariant during this building process.
+
+  It further follows that the orientation can be measured by subtracting the number of left turns
+  from the number of right turns
+  '''
+  _coords = np.concat((coords, coords[:2]))
+  turns = []
+  eps = np.array(((0, 1), (-1, 0)))
+  for i in range(len(coords)):
+    x, y, z = _coords[[i, i+1, i+2]]
+    cross = (y-x) @ eps @ (z-y)
+    turns.append(np.sign(cross))
+  turns = np.array(turns)
+  o = turns.sum().item()
+  return o, turns
+
+def gen_normals(coords=coords):
+  'The normals point into the insides'
+  _coords = np.concat((coords, coords[:1]))
+  o, turns = gen_orientation(coords=coords)
+  normals = []
+  rot = np.array(((0, -1), (1, 0)))
+  for i in range(len(coords)):
+    x, y = _coords[[i, i+1]]
+    n = rot @ (y-x)
+    normals.append(n // abs(n).max())
+  # normals = np.array(normals) * np.expand_dims(np.sign(o) * turns, 1)
+  normals = np.array(normals) * np.sign(o)
+  normals.sum(axis=0)
+  return normals
+
+
+
+
 def part_two(): # Too high
   coords_loop = np.concat([coords, coords[:1]])
   lines = np.stack([coords_loop[:-1], coords_loop[1:]], axis=1)
+
 
   max_area = abs(np.diff(coords, axis=0)).max().item()
   for i,x in enumerate(coords):
