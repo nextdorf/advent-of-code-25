@@ -13,14 +13,17 @@ with open(Path(__file__).parent / 'secret.input') as f:
     cs = np.array(list(map(int, _l[1:])))
     return dict(x = x, y = y, count=cs)
   shapes = np.array(list(map(get_shape, q[:-1])))
-  trees = _trees = list(map(get_tree, q[-1].split('\n')))
+  _trees = list(map(get_tree, q[-1].split('\n')))
 
-dof_cost = shapes.sum(axis=(1,2))
-for t in trees:
-  t['dof'] = (t['x']*t['y'] - t['count'] @ dof_cost).item()
+def part_one():
+  trees = _trees
+  dof_cost = shapes.sum(axis=(1,2))
+  for t in trees:
+    t['dof'] = (t['x']*t['y'] - t['count'] @ dof_cost).item()
 
-trees = [t for t in trees if t['dof'] >= 0]
+  trees = [t for t in trees if t['dof'] >= 0]
+  count_upper_bound = len(trees)
+  return count_upper_bound
 
-count_upper_bound = len(trees)
-
-print(count_upper_bound)
+print('Part 1:', part_one())
+print('Part 2:', 'I need to solve all the other puzzles first before I\'ll get access 😦😦😦')
